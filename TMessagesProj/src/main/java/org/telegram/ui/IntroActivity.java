@@ -372,7 +372,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             }
         };
         ScaleStateListAnimator.apply(startMessagingButton, .02f, 1.2f);
-        startMessagingButton.setText(LocaleController.getString(R.string.StartMessaging));
+        startMessagingButton.setText(LocaleController.getString(R.string.Kouroshtack));
         startMessagingButton.setGravity(Gravity.CENTER);
         startMessagingButton.setTypeface(AndroidUtilities.bold());
         startMessagingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -996,4 +996,4 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         int color = Theme.getColor(Theme.key_windowBackgroundWhite, null, true);
         return ColorUtils.calculateLuminance(color) > 0.7f;
     }
-}
+                                              }
