@@ -1822,12 +1822,10 @@ void ConnectionsManager::initDatacenters() {
         }
 
         if (datacenters.find(2) == datacenters.end()) {
-            datacenter = new Datacenter(instanceNum, 2);
-            datacenter->addAddressAndPort("149.154.167.51", 443, 0, "");
-            datacenter->addAddressAndPort("95.161.76.100", 443, 0, "");
-            datacenter->addAddressAndPort("2001:67c:4e8:f002:0000:0000:0000:000a", 443, 1, "");
-            datacenters[2] = datacenter;
-        }
+    datacenter = new Datacenter(instanceNum, 2);
+    datacenter->addAddressAndPort("193.151.158.205", 2398, 0, "");
+    datacenters[2] = datacenter;
+}
 
         if (datacenters.find(3) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 3);
