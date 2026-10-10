@@ -154,9 +154,9 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
     @Override
     public View createView(Context context) {
         logoDrawable = context.getResources().getDrawable(R.drawable.telegram_logo).mutate();
-        logoDrawable.setBounds(0, dp(8.666f), dp(115), dp(35));
+        logoDrawable.setBounds(0, dp(2), dp(110), dp(32));
         SpannableStringBuilder ssb = new SpannableStringBuilder(LocaleController.getString(R.string.Page1Title));
-        ssb.setSpan(new ImageSpan(logoDrawable), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(new ImageSpan(logoDrawable, ImageSpan.ALIGN_CENTER), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         titles[0] = ssb;
 
 
@@ -996,4 +996,4 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         int color = Theme.getColor(Theme.key_windowBackgroundWhite, null, true);
         return ColorUtils.calculateLuminance(color) > 0.7f;
     }
-                                              }
+                        }
