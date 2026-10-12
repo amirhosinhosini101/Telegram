@@ -154,7 +154,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
     @Override
     public View createView(Context context) {
         logoDrawable = context.getResources().getDrawable(R.drawable.telegram_logo).mutate();
-        logoDrawable.setBounds(0, dp(2), dp(110), dp(32));
+        logoDrawable.setBounds(dp(15), dp(2), dp(125), dp(32));
         SpannableStringBuilder ssb = new SpannableStringBuilder(LocaleController.getString(R.string.Page1Title));
         ssb.setSpan(new ImageSpan(logoDrawable, ImageSpan.ALIGN_CENTER), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         titles[0] = ssb;
@@ -790,16 +790,23 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             loadTexture(R.drawable.intro_powerful_star, 18);
             loadTexture(R.drawable.intro_private_door, 19);
             loadTexture(R.drawable.intro_private_screw, 20);
-            loadTexture(R.drawable.intro_tg_plane, 21);
+            loadTexture(v -> Bitmap.createBitmap(2, 2, Bitmap.Config.ARGB_8888), 21);
             loadTexture(v -> {
-                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                paint.setColor(ThemeColors.TELEGRAM_COLOR); // It's logo color, it should not be colored by the theme
-                int size = dp(ICON_HEIGHT_DP);
-                Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-                Canvas c = new Canvas(bm);
-                c.drawCircle(size / 2f, size / 2f, size / 2f, paint);
-                return bm;
-            }, 22);
+    int size = dp(ICON_HEIGHT_DP);
+    Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+    Canvas c = new Canvas(bm);
+    Bitmap logo = android.graphics.BitmapFactory.decodeResource(
+            getParentActivity().getResources(), R.drawable.intro_tg_plane);
+    if (logo != null) {
+        Bitmap scaled = Bitmap.createScaledBitmap(logo, size, size, true);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setShader(new android.graphics.BitmapShader(scaled,
+                android.graphics.Shader.TileMode.CLAMP,
+                android.graphics.Shader.TileMode.CLAMP));
+        c.drawCircle(size / 2f, size / 2f, size / 2f, paint);
+    }
+    return bm;
+}, 22);
             loadTexture(telegramMaskProvider, 23);
 
             updateTelegramTextures();
