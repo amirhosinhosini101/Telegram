@@ -977,7 +977,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         if (files != null) {
             for (int a = 0; a < files.length; a++) {
                 File file = files[a];
-                if (file.isDirectory() && file.getName().equals("Telegram")) {
+                if (file.isDirectory() && file.getName().equals("Gitbin")) {
                     checkDirectory(file);
                     continue;
                 }
