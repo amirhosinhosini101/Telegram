@@ -593,8 +593,8 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             headerTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             headerTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 26);
             headerTextView.setTypeface(AndroidUtilities.bold());
-            headerTextView.setGravity(Gravity.CENTER);
-            headerTextView.setPadding(dp(16), 0, 0, 0);   // مقدار ۱۶ رو کم و زیاد کن تا به اندازه دلخواه به راست بره
+            headerTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+            headerTextView.setTranslationX(dp(12));   // مقدار رو کم و زیاد کن (مثلاً 8 یا 16 یا 20)
             frameLayout.addView(headerTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 18, 244, 18, 0));
 
             messageTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
