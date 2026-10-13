@@ -151,20 +151,13 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         return true;
     }
 
-    @Override
+        @Override
     public View createView(Context context) {
         logoDrawable = context.getResources().getDrawable(R.drawable.telegram_logo).mutate();
-int logoH = dp(30);
-int logoW = dp(150);
-int iw = logoDrawable.getIntrinsicWidth();
-int ih = logoDrawable.getIntrinsicHeight();
-if (iw > 0 && ih > 0) {
-    // نسبت واقعی تصویر؛ افقی کشیده‌تر از حالت عادی (ضریب 1.3)
-    logoW = (int) (logoH * ((float) iw / ih) * 1.3f);
-}
-logoDrawable.setBounds(0, dp(2), logoW, dp(2) + logoH);
-        SpannableStringBuilder ssb = new SpannableStringBuilder(LocaleController.getString(R.string.Page1Title));
-        ssb.setSpan(new ImageSpan(logoDrawable, ImageSpan.ALIGN_CENTER), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        logoDrawable.setBounds(0, 0, dp(140), dp(34));
+        logoDrawable.setBounds(0, dp(2), logoW, dp(2) + logoH);
+        SpannableStringBuilder ssb = new SpannableStringBuilder(" ");
+        ssb.setSpan(new ImageSpan(logoDrawable, ImageSpan.ALIGN_CENTER), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         titles[0] = ssb;
 
 
