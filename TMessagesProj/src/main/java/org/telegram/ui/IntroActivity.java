@@ -375,7 +375,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             }
         };
         ScaleStateListAnimator.apply(startMessagingButton, .02f, 1.2f);
-        startMessagingButton.setText(LocaleController.getString(R.string.Welcome));
+        startMessagingButton.setText(LocaleController.getString(R.string.StartMessaging));
         startMessagingButton.setGravity(Gravity.CENTER);
         startMessagingButton.setTypeface(AndroidUtilities.bold());
         startMessagingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
