@@ -596,7 +596,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             headerTextView.setGravity(Gravity.CENTER_HORIZONTAL);
 
 if (position == 0) {
-    headerTextView.setTranslationX(dp(12));   // فقط صفحه اول
+    headerTextView.setTranslationX(dp(20));   // فقط صفحه اول
 } else {
     headerTextView.setTranslationX(0);
 }
