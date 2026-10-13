@@ -155,9 +155,9 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
     public View createView(Context context) {
         logoDrawable = context.getResources().getDrawable(R.drawable.telegram_logo).mutate();
         logoDrawable.setBounds(0, 0, dp(140), dp(34));
-        logoDrawable.setBounds(0, dp(2), logoW, dp(2) + logoH);
         SpannableStringBuilder ssb = new SpannableStringBuilder(" ");
         ssb.setSpan(new ImageSpan(logoDrawable, ImageSpan.ALIGN_CENTER), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         titles[0] = ssb;
 
 
