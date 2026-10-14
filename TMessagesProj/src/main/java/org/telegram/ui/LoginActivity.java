@@ -7768,7 +7768,6 @@ private void showMyTerms() {
                   : "Privacy Policy and Terms of Service");
     b.setMessage(fa ? "متن فارسی قوانین اپ خودت اینجا..."
                     : "English text of your app terms here...");
-    b.setCancelable(false);
     b.setPositiveButton(fa ? "موافقت" : "Agree", (dialog, which) -> {
         myTermsAccepted = true;
         if (firstNameField != null) {
@@ -7781,8 +7780,9 @@ private void showMyTerms() {
         setPage(VIEW_PHONE_INPUT, true, null, true);
     });
     AlertDialog d = b.create();
-    d.setCanceledOnTouchOutside(false);
-    showDialog(d);
+d.setCancelable(false);
+d.setCanceledOnTouchOutside(false);
+showDialog(d);
 }
         private void showTermsOfService(boolean needAccept) {
             if (currentTermsOfService == null) {
