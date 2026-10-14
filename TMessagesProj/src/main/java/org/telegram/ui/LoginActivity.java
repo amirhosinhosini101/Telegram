@@ -7764,37 +7764,28 @@ private boolean isFa() {
 private void showMyTerms() {
     boolean fa = isFa();
     AlertDialog.Builder b = new AlertDialog.Builder(getParentActivity());
-    b.setTitle(fa ? "گیت بین
-                  : "Gitbin");
-    b.setMessage(fa ? "سیاست حریم خصوصی و شرایط و ضوابط خدمات
-گیت بین یک پیام‌رسان و شبکه اجتماعی ایرانی برای گفت‌وگو، سرگرمی و فعالیت‌های اجتماعی، فرهنگی، اقتصادی و فروشگاهی است. کاربران، کسب‌وکارها و فروشگاه‌ها می‌توانند در گیت بین فعالیت کنند. گیت بین برای فعالیت‌های سیاسی مناسب نیست.
-فعالیت گیت بین کاملاً تابع قوانین و مقررات جمهوری اسلامی ایران است. همه کاربران موظف‌اند هنگام استفاده از گیت بین، انتشار محتوا، ارسال پیام، ایجاد حساب، گروه‌ها، کانال‌ها و عرضه کالا و خدمات، قوانین کشور و حقوق سایر کاربران را رعایت کنند. مسئولیت محتوای منتشرشده و فعالیت هر حساب بر عهده صاحب آن حساب است.
-کاربران در چارچوب قوانین و این شرایط، برای استفاده قانونی از گیت بین آزادند؛ اما هیچ‌کس حق ندارد با ایجاد مزاحمت، تهدید، فریب، سوءاستفاده از امکانات یا محدودیت استفاده نامشروع، حقوق یا دسترسی قانونی دیگران را مختل کند.
-حساب‌ها و کانال‌های رسمی گیت بین با نشان تأیید مشخص می‌شوند. استفاده‌کنندگان از نام، نشان تجاری یا لوگوی گیت بین، جعل هویت کارکنان یا پشتیبانی گیت بین و ایجاد حساب با نام یا ظاهر مشابه برای فریب کاربران ممنوع است. حساب‌های متخلف ممکن است محدود، مسدود یا حذف شوند و در صورت لزوم موضوع به مراجع قانونی ذی‌صلاح ارجاع خواهد شد.
-رسیدگی به گزارش‌ها و شکایت‌های مربوط به جرایم و تخلفات فضای مجازی بر عهده مراجع قانونی ذی‌صلاح، از جمله پلیس فتا و مراجع قضایی است. گیت بین در حدود قوانین، دستورات و آرای لازم‌الاجرای این مراجع را اجرا می‌کند و اطلاعاتی را که به‌طور قانونی مطالبه شود، مطابق ضوابط قانونی در اختیار مرجع مربوط قرار می‌دهد.
-این برنامه برای کودکان مناسب نیست و برای استفاده از آن باید حداقل ۱۳ سال داشته باشید.
-انتشار یا ارسال محتوای جنسی، مجرمانه، خشونت‌آمیز، توهین‌آمیز، ناقض حریم خصوصی یا حقوق دیگران و هرگونه محتوای مغایر با قوانین جمهوری اسلامی ایران در حساب‌ها، گروه‌ها و کانال‌های گیت بین ممنوع است. در صورت گزارش یا شناسایی تخلف، محتوا حذف و حساب متخلف ممکن است مسدود شود. در موارد لازم نیز مطابق قوانین با مراجع قانونی همکاری می‌شود.
-فایل‌ها و پیام‌های کاربران در گیت بین حداقل به مدت یک سال نگهداری می‌شوند، مگر اینکه کاربر آن‌ها را حذف کند یا نگهداری آن‌ها به دلیل قانونی، امنیتی یا نقض شرایط استفاده ضروری باشد. این مدت یک سال فقط حداقل زمان نگهداری را مشخص می‌کند.
-با انتخاب گزینه «موافقت»، اعلام می‌کنید که این شرایط را مطالعه کرده‌اید و با آن‌ها موافق هستید."
-                    : "Privacy Policy and Terms of Service
-
-Gitbin is an Iranian messaging app and social network for chatting, entertainment, and social, cultural, economic, and shopping activities. Users, businesses, and stores can operate on Gitbin. Gitbin is not suitable for political activities.
-
-Gitbin's operations are fully subject to the laws and regulations of the Islamic Republic of Iran. All users are required to comply with the laws of the country and the rights of other users when using Gitbin, publishing content, sending messages, creating accounts, groups, and channels, and offering goods and services. Responsibility for published content and the activity of each account lies with the owner of that account.
-
-Within the framework of the law and these terms, users are free to use Gitbin lawfully; however, no one has the right to disrupt the rights or lawful access of others through harassment, threats, deception, abuse of features, or illegitimate restrictions on use.
-
-Official Gitbin accounts and channels are identified by a verification badge. Using Gitbin's name, trademark, or logo, impersonating Gitbin staff or support, and creating accounts with a similar name or appearance to deceive users are prohibited. Violating accounts may be restricted, blocked, or deleted, and where necessary, the matter will be referred to the relevant legal authorities.
-
-Handling reports and complaints related to cybercrimes and violations is the responsibility of the relevant legal authorities, including the Cyber Police (FATA) and judicial authorities. Within the limits of the law, Gitbin implements the orders and enforceable rulings of these authorities and provides legally requested information to the relevant authority in accordance with legal regulations.
-
-This app is not suitable for children, and you must be at least 13 years old to use it.
-
-Publishing or sending sexual, criminal, violent, insulting content, content that violates the privacy or rights of others, and any content contrary to the laws of the Islamic Republic of Iran in Gitbin accounts, groups, and channels is prohibited. If a violation is reported or identified, the content will be removed and the violating account may be blocked. Where necessary, we cooperate with legal authorities in accordance with the law.
-
-User files and messages on Gitbin are retained for at least one year, unless the user deletes them or their retention is necessary for legal, security, or terms-of-use violation reasons. This one-year period only specifies the minimum retention time.
-
-By selecting "Confirm," you declare that you have read these terms and agree to them.");
+    b.setTitle(fa ? "گیت بین" : "Gitbin");
+    b.setMessage(fa
+    ? "سیاست حریم خصوصی و شرایط و ضوابط خدمات\n" +
+      "گیت بین یک پیام‌رسان و شبکه اجتماعی ایرانی برای گفت‌وگو، سرگرمی و فعالیت‌های اجتماعی، فرهنگی، اقتصادی و فروشگاهی است. کاربران، کسب‌وکارها و فروشگاه‌ها می‌توانند در گیت بین فعالیت کنند. گیت بین برای فعالیت‌های سیاسی مناسب نیست.\n" +
+      "فعالیت گیت بین کاملاً تابع قوانین و مقررات جمهوری اسلامی ایران است. همه کاربران موظف‌اند هنگام استفاده از گیت بین، انتشار محتوا، ارسال پیام، ایجاد حساب، گروه‌ها، کانال‌ها و عرضه کالا و خدمات، قوانین کشور و حقوق سایر کاربران را رعایت کنند. مسئولیت محتوای منتشرشده و فعالیت هر حساب بر عهده صاحب آن حساب است.\n" +
+      "کاربران در چارچوب قوانین و این شرایط، برای استفاده قانونی از گیت بین آزادند؛ اما هیچ‌کس حق ندارد با ایجاد مزاحمت، تهدید، فریب، سوءاستفاده از امکانات یا محدودیت استفاده نامشروع، حقوق یا دسترسی قانونی دیگران را مختل کند.\n" +
+      "حساب‌ها و کانال‌های رسمی گیت بین با نشان تأیید مشخص می‌شوند. استفاده‌کنندگان از نام، نشان تجاری یا لوگوی گیت بین، جعل هویت کارکنان یا پشتیبانی گیت بین و ایجاد حساب با نام یا ظاهر مشابه برای فریب کاربران ممنوع است. حساب‌های متخلف ممکن است محدود، مسدود یا حذف شوند و در صورت لزوم موضوع به مراجع قانونی ذی‌صلاح ارجاع خواهد شد.\n" +
+      "رسیدگی به گزارش‌ها و شکایت‌های مربوط به جرایم و تخلفات فضای مجازی بر عهده مراجع قانونی ذی‌صلاح، از جمله پلیس فتا و مراجع قضایی است. گیت بین در حدود قوانین، دستورات و آرای لازم‌الاجرای این مراجع را اجرا می‌کند و اطلاعاتی را که به‌طور قانونی مطالبه شود، مطابق ضوابط قانونی در اختیار مرجع مربوط قرار می‌دهد.\n" +
+      "این برنامه برای کودکان مناسب نیست و برای استفاده از آن باید حداقل ۱۳ سال داشته باشید.\n" +
+      "انتشار یا ارسال محتوای جنسی، مجرمانه، خشونت‌آمیز، توهین‌آمیز، ناقض حریم خصوصی یا حقوق دیگران و هرگونه محتوای مغایر با قوانین جمهوری اسلامی ایران در حساب‌ها، گروه‌ها و کانال‌های گیت بین ممنوع است. در صورت گزارش یا شناسایی تخلف، محتوا حذف و حساب متخلف ممکن است مسدود شود. در موارد لازم نیز مطابق قوانین با مراجع قانونی همکاری می‌شود.\n" +
+      "فایل‌ها و پیام‌های کاربران در گیت بین حداقل به مدت یک سال نگهداری می‌شوند، مگر اینکه کاربر آن‌ها را حذف کند یا نگهداری آن‌ها به دلیل قانونی، امنیتی یا نقض شرایط استفاده ضروری باشد. این مدت یک سال فقط حداقل زمان نگهداری را مشخص می‌کند.\n" +
+      "با انتخاب گزینه «موافقت»، اعلام می‌کنید که این شرایط را مطالعه کرده‌اید و با آن‌ها موافق هستید."
+    : "Privacy Policy and Terms of Service\n\n" +
+      "Gitbin is an Iranian messaging app and social network for chatting, entertainment, and social, cultural, economic, and shopping activities. Users, businesses, and stores can operate on Gitbin. Gitbin is not suitable for political activities.\n\n" +
+      "Gitbin's operations are fully subject to the laws and regulations of the Islamic Republic of Iran. All users are required to comply with the laws of the country and the rights of other users when using Gitbin, publishing content, sending messages, creating accounts, groups, and channels, and offering goods and services. Responsibility for published content and the activity of each account lies with the owner of that account.\n\n" +
+      "Within the framework of the law and these terms, users are free to use Gitbin lawfully; however, no one has the right to disrupt the rights or lawful access of others through harassment, threats, deception, abuse of features, or illegitimate restrictions on use.\n\n" +
+      "Official Gitbin accounts and channels are identified by a verification badge. Using Gitbin's name, trademark, or logo, impersonating Gitbin staff or support, and creating accounts with a similar name or appearance to deceive users are prohibited. Violating accounts may be restricted, blocked, or deleted, and where necessary, the matter will be referred to the relevant legal authorities.\n\n" +
+      "Handling reports and complaints related to cybercrimes and violations is the responsibility of the relevant legal authorities, including the Cyber Police (FATA) and judicial authorities. Within the limits of the law, Gitbin implements the orders and enforceable rulings of these authorities and provides legally requested information to the relevant authority in accordance with legal regulations.\n\n" +
+      "This app is not suitable for children, and you must be at least 13 years old to use it.\n\n" +
+      "Publishing or sending sexual, criminal, violent, insulting content, content that violates the privacy or rights of others, and any content contrary to the laws of the Islamic Republic of Iran in Gitbin accounts, groups, and channels is prohibited. If a violation is reported or identified, the content will be removed and the violating account may be blocked. Where necessary, we cooperate with legal authorities in accordance with the law.\n\n" +
+      "User files and messages on Gitbin are retained for at least one year, unless the user deletes them or their retention is necessary for legal, security, or terms-of-use violation reasons. This one-year period only specifies the minimum retention time.\n\n" +
+      "By selecting \"Confirm,\" you declare that you have read these terms and agree to them.");
     b.setPositiveButton(fa ? "موافقت" : "Agree", (dialog, which) -> {
         myTermsAccepted = true;
         if (firstNameField != null) {
