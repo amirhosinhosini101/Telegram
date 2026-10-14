@@ -7754,7 +7754,36 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 showTermsOfService(false);
             }
         }
+private boolean myTermsAccepted = false;
 
+private boolean isFa() {
+    LocaleController.LocaleInfo info = LocaleController.getInstance().getCurrentLocaleInfo();
+    return info != null && info.getLangCode() != null && info.getLangCode().startsWith("fa");
+}
+
+private void showMyTerms() {
+    boolean fa = isFa();
+    AlertDialog.Builder b = new AlertDialog.Builder(getParentActivity());
+    b.setTitle(fa ? "سیاست حریم خصوصی و شرایط و ضوابط خدمات"
+                  : "Privacy Policy and Terms of Service");
+    b.setMessage(fa ? "متن فارسی قوانین اپ خودت اینجا..."
+                    : "English text of your app terms here...");
+    b.setCancelable(false);
+    b.setPositiveButton(fa ? "موافقت" : "Agree", (dialog, which) -> {
+        myTermsAccepted = true;
+        if (firstNameField != null) {
+            firstNameField.requestFocus();
+            AndroidUtilities.showKeyboard(firstNameField);
+        }
+    });
+    b.setNegativeButton(fa ? "رد کردن" : "Decline", (dialog, which) -> {
+        onBackPressed(true);
+        setPage(VIEW_PHONE_INPUT, true, null, true);
+    });
+    AlertDialog d = b.create();
+    d.setCanceledOnTouchOutside(false);
+    showDialog(d);
+}
         private void showTermsOfService(boolean needAccept) {
             if (currentTermsOfService == null) {
                 return;
@@ -8201,8 +8230,12 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         @Override
         public void onShow() {
-            super.onShow();
-            if (privacyView != null) {
+    super.onShow();
+    if (!myTermsAccepted) {
+        showMyTerms();
+        return;
+    }
+    if (privacyView != null) {
                 if (restoringState) {
                     privacyView.setAlpha(1f);
                 } else {
@@ -8231,6 +8264,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             firstNameField.setText("");
             lastNameField.setText("");
+            myTermsAccepted = false;
             requestPhone = params.getString("phoneFormated");
             phoneHash = params.getString("phoneHash");
             currentParams = params;
