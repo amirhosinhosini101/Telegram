@@ -213,6 +213,12 @@ public class Browser {
         if (link.startsWith("https://t.me/")) {
             return link.substring(13);
         }
+        if (link.startsWith("gitbin.site/")) {
+            return link.substring(12);
+        }
+        if (link.startsWith("https://gitbin.site/")) {
+            return link.substring(20);
+        }
         Matcher prefixMatcher = LaunchActivity.PREFIX_T_ME_PATTERN.matcher(link);
         if (prefixMatcher.find()) {
             return prefixMatcher.group(1);
@@ -724,7 +730,7 @@ public class Browser {
                 }
                 return true;
             }
-        } else if ("telegram.me".equals(host) || "t.me".equals(host)) {
+        } else if ("telegram.me".equals(host) || "t.me".equals(host) || "gitbin.site".equals(host)) {
             String path = uri.getPath();
             if (path != null && path.length() > 1) {
                 if (all) {
