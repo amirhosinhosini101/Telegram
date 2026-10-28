@@ -48,6 +48,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     private TextView titleTextView;
     private ImageView logoView;
     private String currentLogoUrl;
+    private int bgColor;
     private static final java.util.HashMap<String, Bitmap> logoCache = new java.util.HashMap<>();
 
     public static class Parsed {
