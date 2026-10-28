@@ -63,13 +63,13 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         FrameLayout view = new FrameLayout(context);
         addView(view, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(176) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
 
-        RLottieImageView imageView = new RLottieImageView(context);
-        imageView.setAnimation(R.raw.qr_code_logo, 108, 108);
-        imageView.playAnimation();
-        imageView.getAnimatedDrawable().setAutoRepeat(1);
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setPadding(0, 0, 0, AndroidUtilities.dp(14));
-        view.addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, top, 0, 0));
+        ImageView imageView = new ImageView(context);
+        try {
+            imageView.setImageResource(context.getApplicationInfo().icon);
+        } catch (Exception ignore) {
+        }
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        view.addView(imageView, LayoutHelper.createFrame(96, 96, Gravity.CENTER, 0, top, 0, 0));
         imageView.setOnClickListener(v -> {
             pressCount++;
             if (pressCount >= 10) {
@@ -95,7 +95,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         titleTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         titleTextView.setTypeface(AndroidUtilities.bold());
         titleTextView.setText(LocaleController.getString(R.string.UpdateTelegram));
-        container.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
+        container.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
 
         textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -104,7 +104,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         textView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
         textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         textView.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
-        container.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 44, 0, 0));
+        container.addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 44, 0, 0));
 
 
         acceptButton = new FrameLayout(context) {
@@ -139,6 +139,16 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         acceptButton.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         addView(acceptButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 46, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 45));
         acceptButton.setOnClickListener(view1 -> {
+            if (appUpdate != null && !(appUpdate.document instanceof TLRPC.TL_document) && appUpdate.url != null && appUpdate.url.length() > 0) {
+                try {
+                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(appUpdate.url));
+                    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getContext().startActivity(intent);
+                } catch (Exception e) {
+                    Browser.openUrl(getContext(), appUpdate.url);
+                }
+                return;
+            }
             if (ApplicationLoader.isStandaloneBuild() || BuildVars.DEBUG_VERSION) {
                 if (!ApplicationLoader.applicationLoaderInstance.checkApkInstallPermissions(getContext())) {
                     return;

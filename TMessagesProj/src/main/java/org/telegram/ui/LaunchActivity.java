@@ -5956,9 +5956,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     private boolean firstAppUpdateCheck = true;
         public void checkAppUpdate(boolean force, Browser.Progress progress) {
-        AndroidUtilities.runOnUIThread(() -> android.widget.Toast.makeText(this,
-            "UPD custom=" + ApplicationLoader.applicationLoaderInstance.isCustomUpdate(),
-            android.widget.Toast.LENGTH_LONG).show());
                 if (!ApplicationLoader.isStandaloneBuild() && !ApplicationLoader.isBetaBuild() && !BuildVars.CHECK_UPDATES) {
             return;
         }
@@ -6002,6 +5999,17 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             if (response instanceof TLRPC.TL_help_appUpdate) {
                 final TLRPC.TL_help_appUpdate res = (TLRPC.TL_help_appUpdate) response;
                 AndroidUtilities.runOnUIThread(() -> {
+                    if (!res.can_not_skip && !(res.document instanceof TLRPC.TL_document) && res.url != null && res.url.length() > 0) {
+                        if (SharedConfig.pendingAppUpdate != null) {
+                            SharedConfig.pendingAppUpdate = null;
+                            SharedConfig.saveConfig();
+                        }
+                        showUrlUpdateDialog(res);
+                        if (progress != null) {
+                            progress.end();
+                        }
+                        return;
+                    }
                     if (SharedConfig.pendingAppUpdate != null && SharedConfig.pendingAppUpdate.version.equals(res.version)) {
                         return;
                     }
@@ -6055,6 +6063,25 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             progress.init();
             progress.onCancel(() -> ConnectionsManager.getInstance(currentAccount).cancelRequest(reqId, true));
         }
+    }
+
+    private void showUrlUpdateDialog(final TLRPC.TL_help_appUpdate upd) {
+        final android.content.SharedPreferences sp = MessagesController.getGlobalMainSettings();
+        if (sp.getInt("gitbin_upd_seen", 0) == upd.id) {
+            return;
+        }
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setTitle("بروزرسانی " + upd.version);
+        b.setMessage(upd.text);
+        b.setPositiveButton("بروزرسانی", (d, w) -> {
+            try {
+                android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(upd.url));
+                startActivity(intent);
+            } catch (Exception ignore) {
+            }
+        });
+        b.setNegativeButton("بعداً", (d, w) -> sp.edit().putInt("gitbin_upd_seen", upd.id).apply());
+        showAlertDialog(b);
     }
 
     public Dialog showAlertDialog(AlertDialog.Builder builder) {
