@@ -6,7 +6,11 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.RippleDrawable;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -41,6 +45,97 @@ import java.util.Locale;
 public class BlockingUpdateView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private TextView textView;
+    private TextView titleTextView;
+    private ImageView logoView;
+    private String currentLogoUrl;
+    private static final java.util.HashMap<String, Bitmap> logoCache = new java.util.HashMap<>();
+
+    public static class Parsed {
+        public String title;
+        public String body;
+        public org.json.JSONObject cfg;
+    }
+
+    public static Parsed parse(String full) {
+        Parsed p = new Parsed();
+        String t = full == null ? "" : full.replace("\r", "");
+        int ci = t.startsWith("@@") ? 0 : t.indexOf("\n@@");
+        if (ci >= 0) {
+            String j = t.substring(t.indexOf("@@", ci) + 2).trim();
+            try {
+                p.cfg = new org.json.JSONObject(j);
+            } catch (Exception ignore) {
+            }
+            t = t.substring(0, ci);
+        }
+        t = t.trim();
+        int nlIdx = t.indexOf('\n');
+        if (nlIdx > 0) {
+            p.title = t.substring(0, nlIdx).trim();
+            p.body = t.substring(nlIdx + 1).trim();
+        } else {
+            p.body = t;
+        }
+        return p;
+    }
+
+    private static int colorOf(org.json.JSONObject cfg, String key, int def) {
+        if (cfg == null) {
+            return def;
+        }
+        try {
+            String v = cfg.optString(key, "").trim();
+            if (v.length() > 0) {
+                return Color.parseColor(v);
+            }
+        } catch (Exception ignore) {
+        }
+        return def;
+    }
+
+    private void loadLogo(final String url) {
+        currentLogoUrl = url;
+        Bitmap cached = logoCache.get(url);
+        if (cached != null) {
+            logoView.setImageBitmap(cached);
+            return;
+        }
+        new Thread(() -> {
+            try {
+                java.net.HttpURLConnection c = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
+                c.setConnectTimeout(8000);
+                c.setReadTimeout(12000);
+                java.io.InputStream in = c.getInputStream();
+                java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
+                byte[] buf = new byte[8192];
+                int n;
+                while ((n = in.read(buf)) > 0 && bos.size() < 6 * 1024 * 1024) {
+                    bos.write(buf, 0, n);
+                }
+                in.close();
+                byte[] data = bos.toByteArray();
+                BitmapFactory.Options o = new BitmapFactory.Options();
+                o.inJustDecodeBounds = true;
+                BitmapFactory.decodeByteArray(data, 0, data.length, o);
+                int sample = 1;
+                while (o.outWidth / sample > 1024 || o.outHeight / sample > 1024) {
+                    sample *= 2;
+                }
+                BitmapFactory.Options o2 = new BitmapFactory.Options();
+                o2.inSampleSize = sample;
+                final Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length, o2);
+                if (bmp != null) {
+                    AndroidUtilities.runOnUIThread(() -> {
+                        logoCache.put(url, bmp);
+                        if (url.equals(currentLogoUrl)) {
+                            logoView.setImageBitmap(bmp);
+                        }
+                    });
+                }
+            } catch (Exception ignore) {
+            }
+        }).start();
+    }
     private TextView acceptTextView;
     private FrameLayout radialProgressView;
     private FrameLayout acceptButton;
@@ -63,7 +158,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         FrameLayout view = new FrameLayout(context);
         addView(view, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(176) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
 
-        ImageView imageView = new ImageView(context);
+        final ImageView imageView = new ImageView(context);
+        logoView = imageView;
         try {
             imageView.setImageResource(context.getApplicationInfo().icon);
         } catch (Exception ignore) {
@@ -89,7 +185,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
 
         scrollView.addView(container);
 
-        TextView titleTextView = new TextView(context);
+        titleTextView = new TextView(context);
         titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
@@ -299,10 +395,56 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
         }
-        SpannableStringBuilder builder = new SpannableStringBuilder(update.text);
-        MessageObject.addEntitiesToText(builder, update.entities, false, false, false, false);
+        Parsed ps = parse(update.text);
+        org.json.JSONObject cfg = ps.cfg;
+        int defBg = Theme.getColor(Theme.key_windowBackgroundWhite);
+        bgColor = colorOf(cfg, "bg", defBg);
+        setBackgroundColor(bgColor);
+        gradientDrawableTop.setColors(new int[]{bgColor, Color.TRANSPARENT});
+        gradientDrawableBottom.setColors(new int[]{bgColor, Color.TRANSPARENT});
+        titleTextView.setTextColor(colorOf(cfg, "title_color", Theme.getColor(Theme.key_windowBackgroundWhiteBlackText)));
+        textView.setTextColor(colorOf(cfg, "text_color", Theme.getColor(Theme.key_windowBackgroundWhiteBlackText)));
+        titleTextView.setText(ps.title != null && ps.title.length() > 0 ? ps.title : LocaleController.getString(R.string.UpdateTelegram));
+        SpannableStringBuilder builder = new SpannableStringBuilder(ps.body);
+        if (ps.title == null && cfg == null) {
+            MessageObject.addEntitiesToText(builder, update.entities, false, false, false, false);
+        }
         textView.setText(builder);
-        if (update.document instanceof TLRPC.TL_document) {
+
+        // logo
+        String logoUrl = cfg == null ? "" : cfg.optString("logo", "").trim();
+        int logoSize = cfg == null ? 96 : Math.max(48, Math.min(140, cfg.optInt("logo_size", 96)));
+        FrameLayout.LayoutParams llp = (FrameLayout.LayoutParams) logoView.getLayoutParams();
+        llp.width = AndroidUtilities.dp(logoSize);
+        llp.height = AndroidUtilities.dp(logoSize);
+        logoView.setLayoutParams(llp);
+        if (logoUrl.length() > 0) {
+            loadLogo(logoUrl);
+        } else {
+            currentLogoUrl = null;
+            try {
+                logoView.setImageResource(getContext().getApplicationInfo().icon);
+            } catch (Exception ignore) {
+            }
+        }
+
+        // button
+        String btnColorStr = cfg == null ? "" : cfg.optString("btn_color", "").trim();
+        if (btnColorStr.length() > 0) {
+            int btnColor = colorOf(cfg, "btn_color", 0xff2196f3);
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColor(btnColor);
+            gd.setCornerRadius(AndroidUtilities.dp(6));
+            acceptButton.setBackground(new RippleDrawable(ColorStateList.valueOf(0x33ffffff), gd, null));
+        } else {
+            acceptButton.setBackgroundDrawable(Theme.AdaptiveRipple.filledRectByKey(Theme.key_featuredStickers_addButton, 4));
+        }
+        acceptTextView.setTextColor(colorOf(cfg, "btn_text_color", 0xffffffff));
+        acceptButton.setVisibility(cfg != null && cfg.optBoolean("hide_btn", false) ? View.GONE : View.VISIBLE);
+        String btnText = cfg == null ? "" : cfg.optString("btn_text", "").trim();
+        if (btnText.length() > 0) {
+            acceptTextView.setText(btnText);
+        } else if (update.document instanceof TLRPC.TL_document) {
             acceptTextView.setText(LocaleController.getString(R.string.Update) + String.format(Locale.US, " (%1$s)", AndroidUtilities.formatFileSize(update.document.size)));
         } else {
             acceptTextView.setText(LocaleController.getString(R.string.Update));
@@ -327,14 +469,22 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                         setVisibility(GONE);
                         SharedConfig.pendingAppUpdate = null;
                         SharedConfig.saveConfig();
+                    } else if (appUpdate == null || res.id != appUpdate.id) {
+                        SharedConfig.pendingAppUpdate = res;
+                        SharedConfig.saveConfig();
+                        show(accountNum, res, false);
                     }
+                } else if (response instanceof TLRPC.TL_help_noAppUpdate) {
+                    setVisibility(GONE);
+                    SharedConfig.pendingAppUpdate = null;
+                    SharedConfig.saveConfig();
                 }
             }));
         }
     }
 
-    Drawable gradientDrawableTop = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[] {Theme.getColor(Theme.key_windowBackgroundWhite), Color.TRANSPARENT });
-    Drawable gradientDrawableBottom = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {Theme.getColor(Theme.key_windowBackgroundWhite), Color.TRANSPARENT });
+    GradientDrawable gradientDrawableTop = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[] {Theme.getColor(Theme.key_windowBackgroundWhite), Color.TRANSPARENT });
+    GradientDrawable gradientDrawableBottom = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {Theme.getColor(Theme.key_windowBackgroundWhite), Color.TRANSPARENT });
 
     @Override
     protected void dispatchDraw(Canvas canvas) {

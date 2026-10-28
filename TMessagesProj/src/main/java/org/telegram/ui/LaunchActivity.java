@@ -6004,7 +6004,20 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                             SharedConfig.pendingAppUpdate = null;
                             SharedConfig.saveConfig();
                         }
+                        if (blockingUpdateView != null) {
+                            blockingUpdateView.setVisibility(View.GONE);
+                        }
                         showUrlUpdateDialog(res);
+                        if (progress != null) {
+                            progress.end();
+                        }
+                        return;
+                    }
+                    if (res.can_not_skip && !(res.document instanceof TLRPC.TL_document) && res.url != null && res.url.length() > 0) {
+                        SharedConfig.pendingAppUpdate = res;
+                        SharedConfig.saveConfig();
+                        showUpdateActivity(accountNum, res, false);
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
                         if (progress != null) {
                             progress.end();
                         }
@@ -6034,6 +6047,9 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 });
                         } else if (response instanceof TLRPC.TL_help_noAppUpdate) {
                 AndroidUtilities.runOnUIThread(() -> {
+                    if (blockingUpdateView != null) {
+                        blockingUpdateView.setVisibility(View.GONE);
+                    }
                     if (SharedConfig.pendingAppUpdate != null) {
                         SharedConfig.pendingAppUpdate = null;
                         SharedConfig.saveConfig();
@@ -6071,8 +6087,11 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             return;
         }
         AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setTitle("بروزرسانی " + upd.version);
-        b.setMessage(upd.text);
+        BlockingUpdateView.Parsed ps = BlockingUpdateView.parse(upd.text);
+        String dTitle = ps.title != null && ps.title.length() > 0 ? ps.title : "بروزرسانی " + upd.version;
+        String dBody = ps.body;
+        b.setTitle(dTitle);
+        b.setMessage(dBody);
         b.setPositiveButton("بروزرسانی", (d, w) -> {
             try {
                 android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(upd.url));
