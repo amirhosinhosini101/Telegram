@@ -5955,11 +5955,11 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     private boolean firstAppUpdateCheck = true;
-    public void checkAppUpdate(boolean force, Browser.Progress progress) {
+        public void checkAppUpdate(boolean force, Browser.Progress progress) {
+        AndroidUtilities.runOnUIThread(() -> android.widget.Toast.makeText(this,
+            "UPD custom=" + ApplicationLoader.applicationLoaderInstance.isCustomUpdate(),
+            android.widget.Toast.LENGTH_LONG).show());
                 if (!ApplicationLoader.isStandaloneBuild() && !ApplicationLoader.isBetaBuild() && !BuildVars.CHECK_UPDATES) {
-            return;
-        }
-        if (!force && !BuildVars.CHECK_UPDATES) {
             return;
         }
         if (ApplicationLoader.applicationLoaderInstance.isCustomUpdate()) {
@@ -7035,7 +7035,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         } else if (SharedConfig.pendingAppUpdate != null && SharedConfig.pendingAppUpdate.can_not_skip) {
             showUpdateActivity(UserConfig.selectedAccount, SharedConfig.pendingAppUpdate, true);
         }
-        checkAppUpdate(false, null);
+        checkAppUpdate(true, null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ApplicationLoader.canDrawOverlays = Settings.canDrawOverlays(this);
